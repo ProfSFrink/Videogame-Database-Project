@@ -42,7 +42,6 @@ class Game(): # A game object - each game in the database will be an instance of
     def __str__(self):
         
         return "TITLE: %s DEVELOPER: %s YEAR OF RELEASE: %s" %(self.name, self.developer, self.year) # This will be returned when we print the object
-print("Game class initalised")
 
 # PLATFORM OBJECT
 
@@ -58,8 +57,46 @@ class Platform(): # A platform object - every platform in the database will be a
         
     def __str__(self):
         
-        return self.name
-print("Platform class initalised")
+        return "NAME: %s MANUFACTURER: %s YEAR OF RELEASE: %s" %(self.name, self.manufacturer, self.release)
+
+# FUNCTIONS FOR FILE HANDLING
+
+filepath = 'C:\\Users\\ProfS\\OneDrive\\Personal\\Learning\\2022 Complete Python Bootcamp from Zero to Hero in Python\\19. Capstone Project\\Videogame Database Project\\'
+
+import pickle # We will use the pickle module for file-handling as this allows us to save objects, list and dictionaries to a binary file.
+
+def load__platform_database():
+    #LOAD PLATFORM DATABASE
+
+    with open(filepath+'platforms.db', 'rb') as f_platforms:
+        return pickle.load(f_platforms)
+
+def save_platform_database(file):
+    #SAVE PLATFORM DATABASE
+
+    pass
+
+def load__genre_database():
+    #LOAD GENRE DATABASE
+
+    with open(filepath+'genre.db', 'rb') as f_genre:
+        return pickle.load(f_genre)
+
+def save_genre_database(file):
+    #SAVE GENRE DATABASE
+    
+    pass
+
+def load_game_database():
+    #LOAD GAME DATABASE    
+    
+    with open(filepath+'videogame.db', 'rb') as f_videogame:        
+        return pickle.load(f_videogame)
+
+def save_game_database(file):
+    #SAVE GAME DATABASE
+
+    pass
 
 # HERE WE WILL DEFINE A FUNCTION THAT ADDS A NEW GAME TO THE DATABASE
 
@@ -70,34 +107,15 @@ def add_game():
 
 if __name__ == "__main__":
 
-    #LOAD THE DATABASE
+    platforms = load__platform_database()
+    print('Platform database loaded')
+    genre = load__genre_database()
+    print('Genre database loaded')
+    my_games = load_game_database()
+    print('Game database loaded')
 
-    filepath = 'C:\\Users\\ProfS\\OneDrive\\Personal\\Learning\\2022 Complete Python Bootcamp from Zero to Hero in Python\\19. Capstone Project\\Videogame Database Project'
+for g in my_games:
+    print(g)
 
-    import pickle # We will use the pickle module for file-handling as this allows us to save objects, list and dictionaries to a binary file.
-
-    with open('platforms.db', 'rb') as f_platforms:
-        platforms = pickle.load(f_platforms)
-    print("platforms.db loaded successfully")
-
-    with open('genre.db', 'rb') as f_genre:
-        genre = pickle.load(f_genre)
-    print("genre.db loaded successfully")
-
-    with open('videogame.db', 'rb') as f_videogame:
-        my_games = pickle.load(f_videogame)
-    print("videogame.db loaded successfully")
-
-    for i in my_games:
-        print(color.BOLD + "GAME" + color.END)
-        print("====")
-        print(color.BOLD + "NAME: "+color.END +i.name)
-        print(color.BOLD + "DEVELOPER: "+color.END +i.developer)
-        print(color.BOLD + "PUBLISHER: "+color.END +i.publisher)
-        print(color.BOLD + "GENRE: "+color.END +i.genre)
-        print(color.BOLD + "PLATFORM: "+color.END +str(platforms[i.platform]))
-        print(color.BOLD + "FORMAT: "+color.END +i.media)
-        print(color.BOLD + "YEAR OF RELEASE: "+color.END +str(i.year))
-        print(color.BOLD + "COMPOSER: "+color.END +i.soundtrack)
-        print(color.BOLD + "NOTE: "+color.END +i.note)
-        print("\n")
+for v in platforms.values():
+    print(v)
