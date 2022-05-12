@@ -8,6 +8,14 @@
 #plan to have each game be it's own object with a defined base class and create a data structure of those objects and be able to add, edit, delete and sort them by certain criteria
 #and then save it to a simple text file.
 
+# FUNCTION FOR CLEARING THE CONSOLE SCREEN
+
+import os
+
+def cls():
+    # This will clear the console screen everytime it is run
+    os.system('cls' if os.name=='nt' else 'clear')
+
 class color:
    PURPLE = '\033[95m'
    CYAN = '\033[96m'
@@ -57,15 +65,7 @@ class Platform(): # A platform object - every platform in the database will be a
         
     def __str__(self):
         
-        return "NAME: %s MANUFACTURER: %s YEAR OF RELEASE: %s" %(self.name, self.manufacturer, self.release)
-
-import os
-
-# FUNCTION FOR CLEARING THE CONSOLE SCREEN
-
-def cls():
-    # This will clear the console screen everytime it is run
-    os.system('cls' if os.name=='nt' else 'clear')
+        return "%s" %(self.name)
 
 # FUNCTIONS FOR FILE HANDLING
 
@@ -80,7 +80,7 @@ def load__platform_database():
     with open(filepath+'platforms.db', 'rb') as f_platforms:
         return pickle.load(f_platforms)
 
-def save_platform_database(file):
+def save_platform_database():
     #SAVE PLATFORM DATABASE
     pass
 
@@ -89,9 +89,8 @@ def load__genre_database():
     with open(filepath+'genre.db', 'rb') as f_genre:
         return pickle.load(f_genre)
 
-def save_genre_database(file):
+def save_genre_database():
     #SAVE GENRE DATABASE
-    
     pass
 
 def load_game_database():
@@ -99,14 +98,119 @@ def load_game_database():
     with open(filepath+'videogame.db', 'rb') as f_videogame:        
         return pickle.load(f_videogame)
 
-def save_game_database(file):
+def save_game_database():
     #SAVE GAME DATABASE
-    pass
+    with open(filepath+'videogame.db', 'wb') as handle:
+        pickle.dump(my_games, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 # FUNCTIONS FOR ADDING, EDITING, DELTEING FROM DATABASE
 
+def new_game_genre_choice():
+    
+    index = 1
+    print("\nGenre's available")
+    for g in genre:
+        print(str(index)+' '+genre[index-1])
+        index +=1
+    
+    while True:
+        try:    
+            genre_choice = int(input("\nPlease enter the number for the genre you want:"))
+        except:
+            print("\nPlease enter a number matching a genre")
+            continue
+            
+        if genre_choice < 1 or genre_choice > len(genre):
+            print("\nPlease enter a number matching a genre")
+            continue
+        else:
+            break
+            
+    return genre[genre_choice-1]
+
+def new_game_platform_choice():
+    
+    print("\nPlatforms available\n")
+    for k,v in platforms.items():
+        print(k,v)
+
+    while True:
+        in_plat = input("\nEnter platform initals:")
+
+        for k in platforms.keys():
+            if in_plat.upper() == k:
+                plat_exists = True
+                break
+            else:
+                plat_exists = False
+                continue
+    
+        if plat_exists:
+            return in_plat.upper()
+            break
+        else:
+            print("\nPlatform does not exists in database!")
+            continue
+
 def add_game():
-    pass
+    
+    while True:
+        cls()
+        new_game_name = input("NEW GAME NAME:")
+        new_game_dev = input("NEW GAME DEVELOPER:")
+        new_game_pub = input("NEW GAME PUBLISHER:")
+        new_game_gen = new_game_genre_choice()
+        new_game_plat = new_game_platform_choice()
+        new_game_frmt = str.upper(input("NEW GAME FORMAT CARTRIDGE/DISC/DIGITAL:"))
+     
+        while True:
+            try:
+                new_game_year = int(input("NEW GAME RELEASE YEAR:"))
+            except:
+                print("\nPlease enter relase year in 2XXX format")
+                continue
+            else:
+                break
+            
+        new_game_comp = input("NEW GAME COMPOSER:")
+        new_game_note = input("NEW GAME NOTES:")
+    
+        print("\n")
+        print(color.BOLD + "GAME" + color.END) 
+        print("====")
+        print(color.BOLD + "NAME: "+color.END +new_game_name)
+        print(color.BOLD + "DEVELOPER: "+color.END +new_game_dev)
+        print(color.BOLD + "PUBLISHER: "+color.END +new_game_pub)
+        print(color.BOLD + "GENRE: "+color.END +new_game_gen)
+        print(color.BOLD + "PLATFORM: "+color.END +str(new_game_plat))
+        print(color.BOLD + "FORMAT: "+color.END +new_game_frmt)
+        print(color.BOLD + "YEAR OF RELEASE: "+color.END +str(new_game_year))
+        print(color.BOLD + "COMPOSER: "+color.END +new_game_comp)
+        print(color.BOLD + "NOTE: "+color.END +new_game_note)
+        print("\n")
+        
+        while True:
+            try:
+                print("Do you want to add the above entry to the database or re-enter the whole entry")
+                confirm_add = int(input("1 to confirm, 2 to re-enter:"))
+            except:
+                print("\nYou must enter either 1 or 2, please re-enter")
+                continue
+            if confirm_add < 1 or confirm_add > 2:
+                print("\nYou must enter either 1 or 2, please re-enter")
+                continue
+            else:
+                break
+            
+        if confirm_add == 1:
+            print("\nAdded game to database")
+            my_games.append(Game(new_game_name,new_game_dev,new_game_pub,new_game_gen,new_game_plat,new_game_frmt,new_game_year,new_game_comp,new_game_note))
+            save_game_database()
+            input("\nPress ENTER to return to menu")
+            break
+        elif confirm_add == 2:
+            print("\nPlease re-enter entry\n")
+            continue
 
 def edit_game():
     print("\nEditing game")
@@ -129,13 +233,13 @@ def view_all_games():
         print(color.BOLD + "YEAR OF RELEASE: "+color.END +str(i.year))
         print(color.BOLD + "COMPOSER: "+color.END +i.soundtrack)
         print(color.BOLD + "NOTE: "+color.END +i.note)
-    input()
+    input("\nPress ENTER to continue")
 
 def view_all_platforms():
     cls() # Clear the console screen
     for v in platforms.values():
         print(v)
-    input()
+    input("\nPress ENTER to continue")
 
 # FUNCTIONS FOR MENUS
 
@@ -148,9 +252,9 @@ def view_menu():
         # Display the view menu
         print("\n1VIDEOGAME COLLECTION DATABASE")
         print("================================\n")
-        print("1.View all games")
-        print("2.View all platforms")
-        print("3.Return to main menu")
+        print("1. View all games")
+        print("2. View all platforms")
+        print("3. Return to main menu")
         
         try: # Ask the user to enter a number between 1 and 3
             option = int(input("\nChoose option 1, 2, or 3:"))
@@ -176,10 +280,10 @@ def edit_games_menu():
         # Display the games edit menu
         print("\n1VIDEOGAME COLLECTION DATABASE")
         print("================================\n")
-        print("1.Add a game")
-        print("2.Edit a game")
-        print("3.Delete a game")
-        print("4.Return to the main menu")
+        print("1. Add a game")
+        print("2. Edit a game")
+        print("3. Delete a game")
+        print("4. Return to the main menu")
         
         try: # Ask the user to enter a number between 1 and 4
             option = int(input("\nChoose option 1, 2, 3, or 4:"))
@@ -190,7 +294,7 @@ def edit_games_menu():
             print("Please enter 1, 2,3, or 4\n")
             continue # Restart the loop
         if option == 1:
-            pass
+            add_game()
         elif option == 2:
             pass
         elif option == 3:
@@ -205,10 +309,10 @@ def edit_platforms_menu():
         # Display the platforms edit menu
         print("\n1VIDEOGAME COLLECTION DATABASE")
         print("================================\n")
-        print("1.Add a platform")
-        print("2.Edit a platform")
-        print("3.Delete a platform")
-        print("4.Return to the main menu")
+        print("1. Add a platform")
+        print("2. Edit a platform")
+        print("3. Delete a platform")
+        print("4. Return to the main menu")
         
         try: # Ask the user to enter a number between 1 and 4
             option = int(input("\nChoose option 1, 2, 3, or 4:"))
@@ -234,10 +338,10 @@ def edit_genres_menu():
         # Display the genres edit menu
         print("\n1VIDEOGAME COLLECTION DATABASE")
         print("================================\n")
-        print("1.Add a genre")
-        print("2.Edit a genre")
-        print("3.Delete a genre")
-        print("4.Return to the main menu")
+        print("1. Add a genre")
+        print("2. Edit a genre")
+        print("3. Delete a genre")
+        print("4. Return to the main menu")
         
         try: # Ask the user to enter a number between 1 and 4
             option = int(input("\nChoose option 1, 2, 3, or 4:"))
@@ -263,10 +367,10 @@ def edit_menu():
         # Display the edit menu
         print("\n1VIDEOGAME COLLECTION DATABASE")
         print("================================\n")
-        print("1.Edit games")
-        print("2.Edit platforms")
-        print("3.Edit genres")
-        print("4.Return to the main menu")
+        print("1. Add / Edit / Delete games")
+        print("2. Add / Edit / Delete platforms")
+        print("3. Add / Edit / Delete genres")
+        print("4. Return to the main menu")
         
         try: # Ask the user to enter a number between 1 and 4
             option = int(input("\nChoose option 1, 2, 3, or 4:"))
@@ -292,9 +396,9 @@ def main_menu():
         # Display the main menu
         print("\nVIDEOGAME COLLECTION DATABASE")
         print("===============================\n")
-        print("1.View the database")
-        print("2.Edit the database")
-        print("3.Exit the database")
+        print("1. View the database")
+        print("2. Add / Edit / Delete from the database")
+        print("3. Exit the database")
 
         try: # Ask the user to enter a number between 1 and 3
             option = int(input("\nChoose option 1, 2, or 3:"))
