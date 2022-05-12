@@ -49,7 +49,7 @@ class Game(): # A game object - each game in the database will be an instance of
         
     def __str__(self):
         
-        return "TITLE: %s DEVELOPER: %s YEAR OF RELEASE: %s" %(self.name, self.developer, self.year) # This will be returned when we print the object
+        return "TITLE: %s DEVELOPER: %s YEAR: %s" %(self.name, self.developer, self.year) # This will be returned when we print the object
 
 # PLATFORM OBJECT
 
@@ -76,13 +76,13 @@ import pickle # We will use the pickle module for file-handling as this allows u
 
 def load__platform_database():
     #LOAD PLATFORM DATABASE
-
     with open(filepath+'platforms.db', 'rb') as f_platforms:
         return pickle.load(f_platforms)
 
 def save_platform_database():
     #SAVE PLATFORM DATABASE
-    pass
+    with open(filepath+'platforms.db', 'wb') as f_platforms:
+        pickle.dump(platforms, f_platforms, protocol=pickle.HIGHEST_PROTOCOL)
 
 def load__genre_database():
     #LOAD GENRE DATABASE
@@ -91,7 +91,8 @@ def load__genre_database():
 
 def save_genre_database():
     #SAVE GENRE DATABASE
-    pass
+    with open(filepath+'genre.db', 'wb') as f_genre:
+        pickle.dump(genre, f_genre, protocol=pickle.HIGHEST_PROTOCOL)
 
 def load_game_database():
     #LOAD GAME DATABASE        
@@ -100,8 +101,8 @@ def load_game_database():
 
 def save_game_database():
     #SAVE GAME DATABASE
-    with open(filepath+'videogame.db', 'wb') as handle:
-        pickle.dump(my_games, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(filepath+'videogame.db', 'wb') as f_videogame:
+        pickle.dump(my_games, f_videogame, protocol=pickle.HIGHEST_PROTOCOL)
 
 # FUNCTIONS FOR ADDING, EDITING, DELTEING FROM DATABASE
 
@@ -218,21 +219,10 @@ def edit_game():
 
 # FUNCTIONS FOR VIEWING DATABSE
 
-def view_all_games():
+def view_all_games_simple():
     cls() # Clear the console screen
-    for i in my_games:
-        print("\n")
-        print(color.BOLD + "GAME" + color.END)
-        print("====")
-        print(color.BOLD + "NAME: "+color.END +i.name)
-        print(color.BOLD + "DEVELOPER: "+color.END +i.developer)
-        print(color.BOLD + "PUBLISHER: "+color.END +i.publisher)
-        print(color.BOLD + "GENRE: "+color.END +i.genre)
-        print(color.BOLD + "PLATFORM: "+color.END +str(platforms[i.platform]))
-        print(color.BOLD + "FORMAT: "+color.END +i.media)
-        print(color.BOLD + "YEAR OF RELEASE: "+color.END +str(i.year))
-        print(color.BOLD + "COMPOSER: "+color.END +i.soundtrack)
-        print(color.BOLD + "NOTE: "+color.END +i.note)
+    for g in my_games:
+        print(g)
     input("\nPress ENTER to continue")
 
 def view_all_platforms():
@@ -265,7 +255,7 @@ def view_menu():
             print("Please enter 1, 2, or 3\n")
             continue # Restart the loop
         if option == 1:
-            view_all_games() # Run view_all_games function
+            view_all_games_simple() # Run view_all_games function
         elif option == 2:
             view_all_platforms() # Run view_all_platforms function
         elif option == 3:
@@ -430,5 +420,5 @@ if __name__ == "__main__":
     print('Genre database loaded')
     my_games = load_game_database() # Load the games database into memory
     print('Game database loaded')
-
+    
     main_menu() # Load the main menu

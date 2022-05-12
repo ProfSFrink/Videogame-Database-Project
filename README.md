@@ -4,7 +4,7 @@ This is my capstone project for my python bootcamp course on udemy, the purpose 
 I want to implement the following:
 
 01) A database of games and consoles.
-02) Add games to the database
+02) Add games to the database - DONE 12/05/2022
 03) Edit games in the database
 04) Delete games from the database
 05) Add consoles to the database
