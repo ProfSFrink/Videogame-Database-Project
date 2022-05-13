@@ -104,7 +104,7 @@ def save_game_database():
     with open(filepath+'videogame.db', 'wb') as f_videogame:
         pickle.dump(my_games, f_videogame, protocol=pickle.HIGHEST_PROTOCOL)
 
-# FUNCTIONS FOR ADDING, EDITING, DELTEING FROM DATABASE
+# FUNCTIONS FOR ADDING, EDITING, DELTEING GAMES FROM THE DATABASE
 
 def new_game_genre_choice():
     
@@ -217,19 +217,46 @@ def edit_game():
     print("\nEditing game")
     pass
 
+# FUNCTIONS FOR ADDING, EDITING AND DELETING GENRES FROM THE DATABASE
+
+def add_genre():
+    view_all_genres() # Display list of current genres
+    new_genre = input("Please enter your new genre:") # Ask the user to enter there new genre
+
+    for g in genre: # We iterate through our list of genre and check to see if the genre being added already exists
+        if new_genre.upper() == g.upper():
+            genre_exists = True
+        else:
+            genre_exists = False
+        
+    if genre_exists == True: # If the genre already does exits we inform the user
+        print("Genre already in database")
+        input("Press ENTER to continue")
+    else:
+        print("Genre added to database: "+new_genre) # If it does not we add to the genre list
+        genre.append(new_genre)
+        genre.sort() # We then resort the genre list
+        save_genre_database() # Then save it to the genre file
+
 # FUNCTIONS FOR VIEWING DATABSE
 
 def view_all_games_simple():
     cls() # Clear the console screen
     for g in my_games:
-        print(g)
-    input("\nPress ENTER to continue")
+        print(g) # Iterate through the game database and print each game object
+    input("\nPress ENTER to continue") # This is to pause the screen so that the user can see the output in the console window
 
 def view_all_platforms():
     cls() # Clear the console screen
     for v in platforms.values():
-        print(v)
-    input("\nPress ENTER to continue")
+        print(v) # Iterate through the game database and print each platform object
+    input("\nPress ENTER to continue") # This is to pause the screen so that the user can see the output in the console window
+
+def view_all_genres():
+    cls() # Clear the console screen
+    for g in genre:
+        print(g) # Iterate through the game database and print each genre in the list
+    input("\nPress ENTER to continue") # This is to pause the screen so that the user can see the output in the console window
 
 # FUNCTIONS FOR MENUS
 
@@ -244,14 +271,15 @@ def view_menu():
         print("================================\n")
         print("1. View all games")
         print("2. View all platforms")
-        print("3. Return to main menu")
+        print("3. View all genres")
+        print("4. Return to main menu")
         
         try: # Ask the user to enter a number between 1 and 3
             option = int(input("\nChoose option 1, 2, or 3:"))
         except: # If they enter a character, ask the user to enter a number
             print("You must enter a number!\n")
             continue # Restart the loop
-        if option < 1 or option > 3: # If they enter a number other and 1, 2, or 3 ask them to enter a number between 1 and 3
+        if option < 1 or option > 4: # If they enter a number other and 1, 2, or 3 ask them to enter a number between 1 and 3
             print("Please enter 1, 2, or 3\n")
             continue # Restart the loop
         if option == 1:
@@ -259,6 +287,8 @@ def view_menu():
         elif option == 2:
             view_all_platforms() # Run view_all_platforms function
         elif option == 3:
+            view_all_genres() # Run view_all_genres function
+        elif option == 4:
             break # Exit view menu and break the loop
 
 # EDIT MENU FUNCTIONS
@@ -342,7 +372,7 @@ def edit_genres_menu():
             print("Please enter 1, 2,3, or 4\n")
             continue # Restart the loop
         if option == 1:
-            pass
+            add_genre()
         elif option == 2:
             pass
         elif option == 3:

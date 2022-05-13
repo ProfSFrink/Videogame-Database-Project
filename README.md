@@ -10,8 +10,9 @@ I want to implement the following:
 05) Add consoles to the database
 06) Edit consoles in the database
 07) Delete consoles from the database
-08) Add genres to the database
+08) Add genres to the database - DONE 13/05/2022
 09) Edit genres in the database
 10) Delete genres in the database
-11) View games in the database
+11) View games in the database - REMOVED 12/05/2022 as displaying duplicate entries
 12) View consoles in the database
+13) View genres in the database - DONE 13/05/2022
