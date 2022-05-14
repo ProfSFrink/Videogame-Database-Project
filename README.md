@@ -3,16 +3,16 @@ This is my capstone project for my python bootcamp course on udemy, the purpose 
 
 I want to implement the following:
 
-01) A database of games and consoles.
+01) A database of games and platforms.
 02) Add games to the database - DONE 12/05/2022
 03) Edit games in the database
 04) Delete games from the database
-05) Add consoles to the database
-06) Edit consoles in the database
-07) Delete consoles from the database
+05) Add platforms to the database - DONE 14/05/2022
+06) Edit platforms in the database
+07) Delete platforms from the database
 08) Add genres to the database - DONE 13/05/2022
 09) Edit genres in the database
 10) Delete genres in the database
 11) View games in the database - REMOVED 12/05/2022 as displaying duplicate entries
-12) View consoles in the database
+12) View platforms in the database
 13) View genres in the database - DONE 13/05/2022

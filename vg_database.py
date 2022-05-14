@@ -217,6 +217,69 @@ def edit_game():
     print("\nEditing game")
     pass
 
+# FUNCTIONS FOR ADDING, EDITING AND DELETING PLATFORMS FROM THE DATABASE
+
+def add_platform(): #Add a new plaform to the database
+    
+    while True:
+        cls() # Clear the console screen
+
+        # Ask the user the new platforms name, initals, manufacturer and media format
+        new_plat_name = input("NEW PLATFORM NAME:")
+        new_plat_init = input("NEW PLATFORM INITALS:")
+        new_plat_manu = input("NEW PLATFORM MANUFACTURER:")
+        new_plat_media = input("NEW PLATFORM MEDIA FORMAT:")
+
+        # Ask the user the new platforms release year and then error check to make sure it's an integer
+        while True:
+            try:
+                new_plat_year = int(input("NEW PLATFORM RELEASE YEAR:"))
+            except: # If they enter anything other than a whole number we ask again and restart the loop
+                print("\nPlease enter relase year in 2XXX format")
+                continue
+            else:
+                break # If the input is correct we break the loop
+
+        # Ask the user for any additional notes about the new platform        
+        new_plat_note = input("NEW PLATFORMS ADDITIONAL NOTES:")
+        
+        # We display the new platform on screen to make sure the entered information is correct
+        print("\n")
+        print(color.BOLD + "NEW PLATFORM" + color.END) 
+        print("====")
+        print(color.BOLD + "NAME: "+color.END +new_plat_name)
+        print(color.BOLD + "INITIALS: "+color.END +new_plat_init)
+        print(color.BOLD + "MANUFACTURER: "+color.END +new_plat_manu)
+        print(color.BOLD + "MEDIA FORMAT: "+color.END +new_plat_media)
+        print(color.BOLD + "YEAR OF RELEASE: "+color.END +str(new_plat_year))
+        print(color.BOLD + "NEW PLATFORM ADDITIONAL NOTES: "+color.END +new_plat_note)
+        print("\n")
+        
+        # We ask the user to either confirm the new platform or re-enter it
+        while True:
+            try:
+                print("Do you want to add the above entry to the database or re-enter the whole entry")
+                confirm_add = int(input("1 to confirm, 2 to re-enter:"))
+            except: # If they do not enter a whole number we ask again
+                print("\nYou must enter either 1 or 2, please re-enter")
+                continue
+            if confirm_add < 1 or confirm_add > 2: # If they don't enter a 1 or 2 we ask again
+                print("\nYou must enter either 1 or 2, please re-enter")
+                continue
+            else:
+                break
+                
+        if confirm_add == 1: # If they input 1 we add the new platform to the database
+            
+            print("\nAdded platform to database")
+            platforms[new_plat_init] = Platform(new_plat_name,new_plat_manu,new_plat_media,new_plat_year,new_plat_note)
+            save_platform_database()
+            input("\nPress ENTER to return to menu")
+            break
+        elif confirm_add == 2: # If they input 2 we ask them to re-enter
+            print("\nPlease re-enter entry\n")
+            continue
+
 # FUNCTIONS FOR ADDING, EDITING AND DELETING GENRES FROM THE DATABASE
 
 def add_genre():
@@ -343,7 +406,7 @@ def edit_platforms_menu():
             print("Please enter 1, 2,3, or 4\n")
             continue # Restart the loop
         if option == 1:
-            pass
+            add_platform()
         elif option == 2:
             pass
         elif option == 3:
