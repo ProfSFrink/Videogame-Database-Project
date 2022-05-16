@@ -49,7 +49,73 @@ class Game(): # A game object - each game in the database will be an instance of
         
     def __str__(self):
         
-        return "TITLE: %s DEVELOPER: %s YEAR: %s" %(self.name, self.developer, self.year) # This will be returned when we print the object
+        return "TITLE: %s DEVELOPER: %s PLATFORM: %s" %(self.name, self.developer, self.platform)
+    
+    def edit_game(self,index):
+        
+        while True:
+            edit_game_name = input("UPDATE GAME NAME:")
+            edit_game_dev = input("UPDATE GAME DEVELOPER:")
+            edit_game_pub = input("UPDATE GAME PUBLISHER:")
+            edit_game_gen = new_game_genre_choice()
+            edit_game_plat = new_game_platform_choice()
+            edit_game_frmt = str.upper(input("UPDATE GAME FORMAT CARTRIDGE/DISC/DIGITAL:"))
+     
+            while True:
+                try:
+                    edit_game_year = int(input("UPDATE GAME RELEASE YEAR:"))
+                except:
+                    print("\nPlease enter relase year in 2XXX format")
+                    continue
+                else:
+                    break
+            
+            edit_game_comp = input("UPDATE GAME COMPOSER:")
+            edit_game_note = input("UPDATE GAME NOTES:")
+    
+            print("\n")
+            print(color.BOLD + "GAME" + color.END) 
+            print("====")
+            print(color.BOLD + "NAME: "+color.END +edit_game_name)
+            print(color.BOLD + "DEVELOPER: "+color.END +edit_game_dev)
+            print(color.BOLD + "PUBLISHER: "+color.END +edit_game_pub)
+            print(color.BOLD + "GENRE: "+color.END +edit_game_gen)
+            print(color.BOLD + "PLATFORM: "+color.END +str(edit_game_plat))
+            print(color.BOLD + "FORMAT: "+color.END +edit_game_frmt)
+            print(color.BOLD + "YEAR OF RELEASE: "+color.END +str(edit_game_year))
+            print(color.BOLD + "COMPOSER: "+color.END +edit_game_comp)
+            print(color.BOLD + "NOTE: "+color.END +edit_game_note)
+            print("\n")
+        
+            while True:
+                try:
+                    print("Do you want to update the above entry to the database or re-enter the whole entry")
+                    confirm_add = int(input("1 to confirm, 2 to re-enter:"))
+                except:
+                    print("\nYou must enter either 1 or 2, please re-enter")
+                    continue
+                if confirm_add < 1 or confirm_add > 2:
+                    print("\nYou must enter either 1 or 2, please re-enter")
+                    continue
+                else:
+                    break
+            
+            if confirm_add == 1:
+                print("\nGame entry updated in database")
+                my_games[index].name = edit_game_name
+                my_games[index].developer = edit_game_dev
+                my_games[index].publisher = edit_game_pub
+                my_games[index].genre = edit_game_gen
+                my_games[index].platform = edit_game_plat
+                my_games[index].media = edit_game_frmt
+                my_games[index].year = edit_game_year
+                my_games[index].soundtrack = edit_game_comp
+                my_games[index].note = edit_game_note
+                save_game_database()
+                break
+            elif confirm_add == 2:
+                print("\nPlease re-enter entry\n")
+                continue
 
 # PLATFORM OBJECT
 
