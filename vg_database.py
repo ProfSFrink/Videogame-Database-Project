@@ -102,20 +102,35 @@ class Game(): # A game object - each game in the database will be an instance of
             
             if confirm_add == 1:
                 print("\nGame entry updated in database")
-                my_games[index].name = edit_game_name
-                my_games[index].developer = edit_game_dev
-                my_games[index].publisher = edit_game_pub
-                my_games[index].genre = edit_game_gen
-                my_games[index].platform = edit_game_plat
-                my_games[index].media = edit_game_frmt
-                my_games[index].year = edit_game_year
-                my_games[index].soundtrack = edit_game_comp
-                my_games[index].note = edit_game_note
+                self.name = edit_game_name
+                self.developer = edit_game_dev
+                self.publisher = edit_game_pub
+                self.genre = edit_game_gen
+                self.platform = edit_game_plat
+                self.media = edit_game_frmt
+                self.year = edit_game_year
+                self.soundtrack = edit_game_comp
+                self.note = edit_game_note
                 save_game_database()
                 break
             elif confirm_add == 2:
                 print("\nPlease re-enter entry\n")
                 continue
+                
+    def view_game(self):
+        print("\n")
+        print(color.BOLD + "GAME" + color.END)
+        print("====")
+        print(color.BOLD + "NAME: "+color.END +self.name)
+        print(color.BOLD + "DEVELOPER: "+color.END +self.developer)
+        print(color.BOLD + "PUBLISHER: "+color.END +self.publisher)
+        print(color.BOLD + "GENRE: "+color.END +self.genre)
+        print(color.BOLD + "PLATFORM: "+color.END +str(platforms[self.platform]))
+        print(color.BOLD + "FORMAT: "+color.END +self.media)
+        print(color.BOLD + "YEAR OF RELEASE: "+color.END +str(self.year))
+        print(color.BOLD + "COMPOSER: "+color.END +self.soundtrack)
+        print(color.BOLD + "NOTE: "+color.END +self.note)
+        print("\n")
 
 # PLATFORM OBJECT
 
@@ -135,7 +150,7 @@ class Platform(): # A platform object - every platform in the database will be a
 
 # FUNCTIONS FOR FILE HANDLING
 
-filepath = 'C:\\Users\\ProfS\\OneDrive\\Personal\\Learning\\2022 Complete Python Bootcamp from Zero to Hero in Python\\19. Capstone Project\\Videogame Database Project\\'
+filepath = 'C:\\Users\\ProfS\\OneDrive\\Personal\\Learning\\2022 Complete Python Bootcamp from Zero to Hero in Python\\19. Capstone Project\\Videogame-Database-Project\\'
 
 from ast import Pass
 import pickle # We will use the pickle module for file-handling as this allows us to save objects, list and dictionaries to a binary file.
@@ -279,9 +294,39 @@ def add_game():
             print("\nPlease re-enter entry\n")
             continue
 
-def edit_game():
-    print("\nEditing game")
-    pass
+def edit_game_entry():
+
+    index = 0
+    display_count = 0
+    choice = -1
+
+    for g in my_games:
+        print(color.RED +str(index+1)+ color.END+" "+g.name)
+        index += 1
+        display_count += 1
+        
+        if display_count == 10:
+            display_count = 0
+            
+            while True:
+                try:
+                    choice = int(input("\nPlease enter the number of the game you wish to edit, or 0 to display next 10 games:"))
+                except:
+                    print("\nYou must enter a whole number, please re-enter")
+                    continue
+                if choice < 0 or choice > len(my_games):
+                    print("\nYou must enter a number that corresponds to an entry in the database or zero")
+                    continue
+                elif choice == 0:
+                    break
+                else:
+                    break
+        
+        if choice > 0 and choice <= len(my_games):
+            my_games[choice-1].view_game()
+            my_games[choice-1].edit_game(choice-1)
+            save_game_database()
+            break
 
 # FUNCTIONS FOR ADDING, EDITING AND DELETING PLATFORMS FROM THE DATABASE
 
@@ -403,13 +448,13 @@ def view_menu():
         print("3. View all genres")
         print("4. Return to main menu")
         
-        try: # Ask the user to enter a number between 1 and 3
-            option = int(input("\nChoose option 1, 2, or 3:"))
+        try: # Ask the user to enter a number between 1 and 4
+            option = int(input("\nChoose option 1, 2, 3, or 4:"))
         except: # If they enter a character, ask the user to enter a number
             print("You must enter a number!\n")
             continue # Restart the loop
-        if option < 1 or option > 4: # If they enter a number other and 1, 2, or 3 ask them to enter a number between 1 and 3
-            print("Please enter 1, 2, or 3\n")
+        if option < 1 or option > 4: # If they enter a number other and 1, 2, 3, or 4 ask them to enter a number between 1 and 4
+            print("Please enter 1, 2, 3, or 4\n")
             continue # Restart the loop
         if option == 1:
             view_all_games_simple() # Run view_all_games function
@@ -445,7 +490,7 @@ def edit_games_menu():
         if option == 1:
             add_game()
         elif option == 2:
-            pass
+            edit_game_entry()
         elif option == 3:
             pass
         elif option == 4:
