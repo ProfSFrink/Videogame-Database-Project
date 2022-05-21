@@ -412,6 +412,55 @@ def add_genre():
         genre.sort() # We then resort the genre list
         save_genre_database() # Then save it to the genre file
 
+def edit_genre():
+    
+    while True:
+        
+        cls() # Clear the console display
+        for g in range(0,len(genre)): # display list of genres
+            print("{} {}".format(g+1,genre[g]))
+        
+        # Ask the user to input the number corresponding to the genre they wish to edit and error check it
+        try:
+            choice = int(input("\nPlease enter the number of the genre you wish to edit, or 0 exit:"))
+        except: # If they enter a letter we ask them to enter a number
+            print("\nYou must enter a whole number, please re-enter")
+            continue
+        if choice < 0 or choice > len(my_games): # If they enter a number that is out of range we ask again
+            print("\nYou must enter a number that corresponds to an entry in the database or zero")
+            continue
+        elif choice == 0: # If they enter zero we break out of the loop and return to the previous menu
+            break
+        else: # If they enter a valid chouce
+
+            # We display the genre they have selected to edit and then ask for the new one
+            print("\nThe Genre you wish to edit is:")
+            print("\n"+genre[choice-1])
+            edit_genre = input("\nPlease update the entry for this genre:")
+
+            # We then display both the old and new genre on the screen
+            print("\nOLD GENRE: {}".format(genre[choice-1]))
+            print("\nWill be updated to")
+            print("\nNEW GENRE: {}".format(edit_genre))
+            
+            # We then ask the user to confirm if they wish to go ahead with the update
+            while True:
+                try:
+                    confirm = int(input("\nPlease enter 1 to confirm change or 2 to cancel:")) # We ask them to enter 1 to confirm, 2 to cancel
+                except: # If they enter a letter we ask them to try again
+                    print("\nYou must enter either 1 or 2, please re-enter")
+                    continue
+                if confirm < 0 or confirm > 2: # if they enter a number out of range we ask again
+                    print("\nYou must enter either 1 or 2, please re-enter")
+                    continue
+                if confirm == 1: # If they enter 1 we update the genre, sort the genre list and save it to file
+                    genre[choice-1] = edit_genre
+                    genre.sort()
+                    save_genre_database()
+                    break
+                elif confirm == 2: # If they enter 2 we cancel out and return to the menu
+                    break
+
 # FUNCTIONS FOR VIEWING DATABSE
 
 def view_all_games_simple():
@@ -548,7 +597,7 @@ def edit_genres_menu():
         if option == 1:
             add_genre()
         elif option == 2:
-            pass
+            edit_genre()
         elif option == 3:
             pass
         elif option == 4:
