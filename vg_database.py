@@ -51,7 +51,7 @@ class Game(): # A game object - each game in the database will be an instance of
         
         return "TITLE: %s DEVELOPER: %s PLATFORM: %s" %(self.name, self.developer, self.platform)
     
-    def edit_game(self,index):
+    def edit_game(self,index): # A built in function that allows us to edit an instance of the game object
         
         while True:
             edit_game_name = input("UPDATE GAME NAME:")
@@ -134,7 +134,7 @@ class Game(): # A game object - each game in the database will be an instance of
 
 # PLATFORM OBJECT
 
-class Platform(): # A platform object - every platform in the database will be an instance of this object, they will be stored in a dicionary
+class Platform(): # A platform object - every platform in the database will be an instance of this object
     
     def __init__(self,name,manufacturer,media_format,release,note='None'):
         
@@ -144,9 +144,69 @@ class Platform(): # A platform object - every platform in the database will be a
         self.release = release #Year of release
         self.note = note #Any additional information goes here
         
+    def edit_platform(self, init): # A built in function that allows us to edit an instance of the platform object
+        
+        while True:
+            # Ask user to enter updated platform name, manufacturer and media format
+            edit_plat_name = input("\nUPDATE PLATFORM NAME:")
+            edit_plat_manu = input("UPDATE MANUFACTURER:")
+            edit_plat_media = input("UPDATE MEDIA FORMAT:")
+            
+            # Ask user to enter udpdated platform release year
+            while True:
+                try:
+                    edit_plat_release = int(input("UPDATE PLATFORM RELEASE YEAR:"))
+                except: # If they enter a letter ask them to try again
+                    print("\nPlease enter relase year in 2XXX format")
+                    continue
+                else:
+                    break
+            
+            # Ask the user for updated platform notes
+            edit_plat_note = input("UPDATE PLATFORM NOTES:")
+            
+            # Ouput the updated platform entry to the display
+            print(color.BOLD+ "\nINIT: " +color.END+ init)
+            print(color.BOLD+ "NAME: " +color.END+ edit_plat_name)
+            print(color.BOLD+ "MANUFACTURER: " +color.END+ edit_plat_manu)
+            print(color.BOLD+ "MEDIA FORMAT: " +color.END+ edit_plat_media)
+            print(color.BOLD+ "RELEASE YEAR: " +color.END+ str(edit_plat_release))
+            print(color.BOLD+ "NOTES: " +color.END+ edit_plat_note)
+            
+            # Ask the user to confirm they wish to update the platform entry
+            while True:
+                try:
+                    print("\nDo you want to update the above entry to the database or re-enter the whole entry")
+                    confirm_add = int(input("\n1 to confirm, 2 to re-enter, 0 to exit without making changes:"))
+                except: # If they do not enter a number ask them to try again
+                    print("\nYou must enter either 0, 1 or 2, please re-enter")
+                    continue
+                if confirm_add < 0 or confirm_add > 2: # If they don't enter 1 or 2 again ask them to try again
+                    print("\nYou must enter either 0, 1 or 2, please re-enter")
+                    continue
+                else:
+                    break
+                            
+            # If they enter 0 we break out without making any changes
+            if confirm_add == 0:
+                break
+            # If they confirm they want to update the platform entry, we do
+            elif confirm_add == 1:
+                print("\nPlatform entry updated in database")
+                self.name = edit_plat_name
+                self.manufacturer = edit_plat_manu
+                self.media_format = edit_plat_media
+                self.release = edit_plat_release
+                self.note = edit_plat_note
+                break
+            # If they don't we ask them to re-enter the entry
+            elif confirm_add == 2:
+                print("\nPlease re-enter entry\n")
+                continue
+        
     def __str__(self):
         
-        return "%s" %(self.name)
+        return "NAME: %s MANUFACTURER: %s" %(self.name, self.manufacturer)
 
 # FUNCTIONS FOR FILE HANDLING
 
@@ -156,34 +216,41 @@ from ast import Pass
 import pickle # We will use the pickle module for file-handling as this allows us to save objects, list and dictionaries to a binary file.
 
 def load__platform_database():
-    #LOAD PLATFORM DATABASE
+    # LOAD PLATFORM DATABASE
     with open(filepath+'platforms.db', 'rb') as f_platforms:
         return pickle.load(f_platforms)
 
 def save_platform_database():
-    #SAVE PLATFORM DATABASE
+    # SAVE PLATFORM DATABASE
     with open(filepath+'platforms.db', 'wb') as f_platforms:
         pickle.dump(platforms, f_platforms, protocol=pickle.HIGHEST_PROTOCOL)
 
 def load__genre_database():
-    #LOAD GENRE DATABASE
+    # LOAD GENRE DATABASE
     with open(filepath+'genre.db', 'rb') as f_genre:
         return pickle.load(f_genre)
 
 def save_genre_database():
-    #SAVE GENRE DATABASE
+    # SAVE GENRE DATABASE
     with open(filepath+'genre.db', 'wb') as f_genre:
         pickle.dump(genre, f_genre, protocol=pickle.HIGHEST_PROTOCOL)
 
 def load_game_database():
-    #LOAD GAME DATABASE        
+    # LOAD GAME DATABASE        
     with open(filepath+'videogame.db', 'rb') as f_videogame:        
         return pickle.load(f_videogame)
 
 def save_game_database():
-    #SAVE GAME DATABASE
+    # SAVE GAME DATABASE
     with open(filepath+'videogame.db', 'wb') as f_videogame:
         pickle.dump(my_games, f_videogame, protocol=pickle.HIGHEST_PROTOCOL)
+
+def sort_platforms():
+    # SORT PLATFORM DICTIONARY
+    import collections
+
+    od = collections.OrderedDict(sorted(platforms.items()))
+    platforms = od
 
 # FUNCTIONS FOR ADDING, EDITING, DELTEING GAMES FROM THE DATABASE
 
@@ -391,6 +458,45 @@ def add_platform(): #Add a new plaform to the database
             print("\nPlease re-enter entry\n")
             continue
 
+def edit_platform(): # Edit an existing platform within database
+
+    cls() # Clear the console display
+
+    # First we display the current platforms within the database
+    print(color.BOLD+ "PLATFORMS AVAILABLE"+ color.END)
+    print("===================")
+    
+    # Iterate through the platform dictionary and show keys and platform names
+    for k in platforms.keys():
+        print("INI:"+ color.BOLD+ "{} ".format(k)+ color.END+ platforms[k].name)
+    
+    # Ask the user to enter the key of the platform they wish to update
+    while True:
+        choice = input("\nPlease enter the initals of the platform you wish to edit or 'EXIT' to quit:")
+    
+        # If the key exists in the dictionary we output it to the display
+        if choice.upper() in platforms:
+            print(color.BOLD+ "\nPLATFORM FOUND" + color.END)
+            print(color.BOLD+ "INIT: " +color.END+ choice.upper())
+            print(color.BOLD+ "NAME: " +color.END+ platforms[choice.upper()].name)
+            print(color.BOLD+ "MANUFACTURER: " +color.END+ platforms[choice.upper()].manufacturer)
+            print(color.BOLD+ "MEDIA FORMAT: " +color.END+ platforms[choice.upper()].media_format)
+            print(color.BOLD+ "RELEASE YEAR: " +color.END+ str(platforms[choice.upper()].release))
+            print(color.BOLD+ "NOTES: " +color.END+ platforms[choice.upper()].note)
+            
+            # Call the edit_platform function of the instance of the object the user has selected
+            platforms[choice.upper()].edit_platform(choice.upper())
+            # Save the updated platform database and return to the edit platform menu
+            save_platform_database() 
+            break
+        # If the user enters 'EXIT' we return to the edit platform menu without making any changes
+        elif choice.upper() == "EXIT":
+            break
+        # If they enter an invalid dictionary we ask them to try again
+        else:
+            print("Platform not found, please enter the initals of a valid platform")
+            continue
+
 # FUNCTIONS FOR ADDING, EDITING AND DELETING GENRES FROM THE DATABASE
 
 def add_genre():
@@ -566,9 +672,11 @@ def edit_platforms_menu():
             print("Please enter 1, 2,3, or 4\n")
             continue # Restart the loop
         if option == 1:
+            # Call add_platform function
             add_platform()
         elif option == 2:
-            pass
+            # Call edit_platform function
+            edit_platform()
         elif option == 3:
             pass
         elif option == 4:
