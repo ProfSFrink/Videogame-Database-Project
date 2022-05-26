@@ -569,11 +569,80 @@ def edit_genre():
 
 # FUNCTIONS FOR VIEWING DATABSE
 
-def view_all_games_simple():
-    cls() # Clear the console screen
-    for g in my_games:
-        print(g) # Iterate through the game database and print each game object
-    input("\nPress ENTER to continue") # This is to pause the screen so that the user can see the output in the console window
+def view_all_games_name(my_games):
+    # Clear the console display
+    cls()
+    from operator import itemgetter, attrgetter
+
+    # Create a new list which sort the game database by game 'name'
+    sorted_my_games = sorted(my_games, key=attrgetter('name'))
+
+    # Output the sorted list to the display
+    for g in sorted_my_games:
+        print(color.BOLD + " NAME: " + color.END + g.name + color.BOLD + " PUBLISHER: " + color.END + color.RED + g.publisher + color.END + color.BOLD + " PLATFORM: " + color.END + color.YELLOW + g.platform + color.END + color.BOLD + " YEAR: " + color.END + color.CYAN + str(g.year) + color.END + color.BOLD + " GENRE: " + color.END +color.GREEN + g.genre + color.END)
+
+    input("\nPress ENTER to Continue")
+
+def view_all_games_platform(my_games):
+    # Clear the console display
+    cls()
+    from operator import itemgetter, attrgetter
+
+    # Create a new list which sort the game database by game 'name'
+    sorted_my_games = sorted(my_games, key=attrgetter('platform'))
+
+    # Output the sorted list to the display
+    for g in sorted_my_games:
+        print(color.BOLD + " NAME: " + color.END + g.name + color.BOLD + " PUBLISHER: " + color.END + color.RED + g.publisher + color.END + color.BOLD + " PLATFORM: " + color.END + color.YELLOW + g.platform + color.END + color.BOLD + " YEAR: " + color.END + color.CYAN + str(g.year) + color.END + color.BOLD + " GENRE: " + color.END +color.GREEN + g.genre + color.END)
+
+    input("\nPress ENTER to Continue")
+
+def view_all_games_genre(my_games):
+    
+    while True:
+        
+        cls() # Clear the console display
+        for g in range(0,len(genre)): # display list of genres
+            print("{} {}".format(g+1,genre[g]))
+        
+        # Ask the user to input the number corresponding to the genre they wish to edit and error check it
+        try:
+            choice = int(input("\nPlease enter the number of see all games in that genre, or 0 exit:"))
+        except: # If they enter a letter we ask them to enter a number
+            print("\nYou must enter a whole number, please re-enter")
+            continue
+        if choice < 0 or choice > len(my_games): # If they enter a number that is out of range we ask again
+            print("\nYou must enter a number that corresponds to an entry in the database or zero")
+            continue
+        elif choice == 0: # If they enter zero we break out of the loop and return to the previous menu
+            break
+        else: # If they enter a valid choice
+
+            # Clear the console display
+            cls()
+            print("\n" + genre[choice-1] + "\n")
+            
+            # Output all games with that genre to the display
+            for g in my_games:
+                if genre[choice-1] == g.genre:
+                    print(color.BOLD + "NAME: " + color.END + g.name + color.BOLD + " PUBLISHER: " + color.END + color.RED + g.publisher + color.END + color.BOLD + " PLATFORM: " + color.END + color.YELLOW + g.platform + color.END + color.BOLD + " YEAR: " + color.END + color.CYAN + str(g.year) + color.END + color.BOLD + " GENRE: " + color.END +color.GREEN + g.genre + color.END)
+            
+            input("\nPress ENTER to Continue")
+            break
+
+def view_all_games_year(my_games):
+    # Clear the console display
+    cls()
+    from operator import itemgetter, attrgetter
+
+    # Create a new list which sort the game database by game 'release year'
+    sorted_my_games = sorted(my_games, key=attrgetter('year'))
+
+    # Output the sorted list to the display
+    for g in sorted_my_games:
+        print(color.BOLD + " NAME: " + color.END + g.name + color.BOLD + " PUBLISHER: " + color.END + color.RED + g.publisher + color.END + color.BOLD + " PLATFORM: " + color.END + color.YELLOW + g.platform + color.END + color.BOLD + " YEAR: " + color.END + color.CYAN + str(g.year) + color.END + color.BOLD + " GENRE: " + color.END +color.GREEN + g.genre + color.END)
+
+    input("\nPress ENTER to Continue")
 
 def view_all_platforms():
     cls() # Clear the console screen
@@ -591,6 +660,38 @@ def view_all_genres():
 
 # VIEW MENU FUNCTIONS
 
+def view_games_menu():
+    # View games menu function
+    while True:
+        cls() # Clear the console screen
+        # Display the view menu
+        print("\n1VIDEOGAME COLLECTION DATABASE")
+        print("================================\n")
+        print("1. View all games by title")
+        print("2. View all games by platform")
+        print("3. View all games by genre")
+        print("4. View all games by release year")
+        print("5. Return to main menu")
+        
+        try: # Ask the user to enter a number between 1 and 5
+            option = int(input("\nChoose option 1, 2, 3, 4, or 5:"))
+        except: # If they enter a character, ask the user to enter a number
+            print("You must enter a number!\n")
+            continue # Restart the loop
+        if option < 1 or option > 5: # If they enter a number other and 1, 2, 3, 4, or 5 ask them to enter a number between 1 and 5
+            print("Please enter 1, 2, 3, 4, or 5\n")
+            continue # Restart the loop
+        if option == 1:
+            view_all_games_name(my_games) # View all games in the database sorted by game 'name' in ascending order
+        elif option == 2:
+            view_all_games_platform(my_games) # View all games in the database sorted by game 'platform' in ascending order
+        elif option == 3:
+            view_all_games_genre(my_games) # View all games in the database by a genre of the user's choosing
+        elif option == 4:
+            view_all_games_year(my_games) # View all games in the database sorted by game 'release year' in ascending order
+        elif option == 5:
+            break
+
 def view_menu():
     # View menu function
     while True:
@@ -598,7 +699,7 @@ def view_menu():
         # Display the view menu
         print("\n1VIDEOGAME COLLECTION DATABASE")
         print("================================\n")
-        print("1. View all games")
+        print("1. View games in database")
         print("2. View all platforms")
         print("3. View all genres")
         print("4. Return to main menu")
@@ -612,7 +713,7 @@ def view_menu():
             print("Please enter 1, 2, 3, or 4\n")
             continue # Restart the loop
         if option == 1:
-            view_all_games_simple() # Run view_all_games function
+            view_games_menu() # Run view_games_menu
         elif option == 2:
             view_all_platforms() # Run view_all_platforms function
         elif option == 3:
@@ -631,7 +732,7 @@ def edit_games_menu():
         print("================================\n")
         print("1. Add a game")
         print("2. Edit a game")
-        print("3. Delete a game")
+        print("3. Delete a game [NOT IMPLEMENTED]")
         print("4. Return to the main menu")
         
         try: # Ask the user to enter a number between 1 and 4
@@ -660,7 +761,7 @@ def edit_platforms_menu():
         print("================================\n")
         print("1. Add a platform")
         print("2. Edit a platform")
-        print("3. Delete a platform")
+        print("3. Delete a platform [NOT IMPLEMENTED]")
         print("4. Return to the main menu")
         
         try: # Ask the user to enter a number between 1 and 4
@@ -691,7 +792,7 @@ def edit_genres_menu():
         print("================================\n")
         print("1. Add a genre")
         print("2. Edit a genre")
-        print("3. Delete a genre")
+        print("3. Delete a genre [NOT IMPLEMENTED]")
         print("4. Return to the main menu")
         
         try: # Ask the user to enter a number between 1 and 4
